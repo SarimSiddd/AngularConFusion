@@ -6,13 +6,25 @@ import { Comment } from '../shared/Comment';
 import { Params, ActivatedRoute } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { visibility } from '../animations/app.animation';
+import { flyInOut } from '../animations/app.animation';
+import { expand} from '../animations/app.animation';
 
 import 'rxjs/add/operator/switchMap';
 
 @Component({
   selector: 'app-dishdetail',
   templateUrl: './dishdetail.component.html',
-  styleUrls: ['./dishdetail.component.scss']
+  styleUrls: ['./dishdetail.component.scss'],
+  host: {
+  '[@flyInOut]': 'true',
+  'style': 'display: block;'
+  },
+   animations: [
+    flyInOut(),
+    visibility(),
+    expand()
+  ]
 })
 
 export class DishdetailComponent implements OnInit {
@@ -25,7 +37,7 @@ export class DishdetailComponent implements OnInit {
   CommentForm : FormGroup;
   comment: Comment;
   dishcopy = null;
-
+  visibility = 'shown';
   
   constructor(private dishservice: DishService, private route: ActivatedRoute,
     private location: Location, private fb: FormBuilder,  @Inject('BaseURL') private BaseURL) {
@@ -37,9 +49,9 @@ export class DishdetailComponent implements OnInit {
 
     this.dishservice.getDishIds().subscribe(dishIds => this.dishIds = dishIds,  errmess => this.disherrMess = <any>errmess);
     this.route.params
-      .switchMap((params: Params) => { return this.dishservice.getDish(+params['id']); })
-      .subscribe(dish => { this.dish = dish; this.dishcopy = dish; this.setPrevNext(dish.id); },
-      errmess => { this.dish = null; this.disherrMess = <any>errmess; });
+    .switchMap((params: Params) => { this.visibility = 'hidden'; return this.dishservice.getDish(+params['id']); })
+    .subscribe(dish => { this.dish = dish; this.dishcopy = dish; this.setPrevNext(dish.id); this.visibility = 'shown'; },
+    errmess => { this.dish = null; this.disherrMess = <any>errmess; });
 
   
   }
