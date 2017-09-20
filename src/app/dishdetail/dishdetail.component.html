@@ -79,9 +79,12 @@
         
   </div>
    
-<div [hidden]="dish">
-  <md-spinner></md-spinner><h4>Loading . . . Please Wait</h4>
+ <div [hidden]="dish|| disherrMess">
+    <md-spinner></md-spinner><h4>Loading . . . Please Wait</h4>
 </div>
-    
+<div *ngIf="disherrMess">
+    <h2>Error</h2>
+    <h4>{{disherrMess}}</h4>
+</div>
   
 </div>

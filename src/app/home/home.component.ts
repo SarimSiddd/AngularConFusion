@@ -17,14 +17,14 @@ export class HomeComponent implements OnInit {
   dish: Dish;
   promotion: Promotion;	
   leader: Leader;
-
+  disherrMess: string;
 	
   constructor(private dishservice: DishService,
     private promotionservice: PromotionService, private leaderService: LeaderService,  @Inject('BaseURL') private BaseURL) { }
 
   ngOnInit() {
 
-    this.dishservice.getFeaturedDish().subscribe(dishes => this.dish = dishes);
+    this.dishservice.getFeaturedDish().subscribe(dishes => this.dish = dishes,   disherrmess => this.disherrMess = <any>disherrmess);
     this.promotionservice.getFeaturedPromotion().subscribe(promotions => this.promotion = promotions);
     this.leaderService.getFeaturedLeader().subscribe(leaders=> this.leader = leaders);
   }
